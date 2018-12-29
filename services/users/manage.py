@@ -28,6 +28,14 @@ def recreate_db():
 
 
 @cli.command()
+def seed_db():
+    """Seeds the database."""
+    db.session.add(User(username='michael', email="michael@mherman.org"))
+    db.session.add(User(username='zhxu', email="zhxu@163.com"))
+    db.session.commit()
+
+
+@cli.command()
 def test():
     """
     This register a CLI command: test, to discover and run the tests.
