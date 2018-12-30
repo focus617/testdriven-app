@@ -20,3 +20,5 @@ Services
 4.swagger - Swagger API docs
 5.scores - Flask app for managing user scores
 6.exercises - Flask app for managing exercises
+
+[![Build Status](https://travis-ci.org/focus617/testdriven-app.svg?branch=master)](https://travis-ci.org/focus617/testdriven-app)
