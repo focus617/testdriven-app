@@ -5,7 +5,7 @@
 
 # services/users/project/api/models.py
 
-
+import datetime
 from sqlalchemy.sql import func
 
 from project import db
@@ -24,11 +24,13 @@ class User(db.Model):
     def __init__(self, username, email):
         self.username = username
         self.email = email
+        self.created_date = datetime.datetime.utcnow()
 
     def to_json(self):
         return {
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'active': self.active
+            'active': self.active,
+            'created_date': self.created_date
         }

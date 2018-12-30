@@ -70,7 +70,8 @@ def get_single_user(user_id):
                     'id': user.id,
                     'username': user.username,
                     'email': user.email,
-                    'active': user.active
+                    'active': user.active,
+                    'created_date': user.created_date
                 }
             }
             return jsonify(response_object), 200
@@ -96,7 +97,24 @@ def index():
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
-        db.session.add(User(username=username, email=email))
-        db.session.commit()
+
+        response_object = {
+            'status': 'fail',
+            'message': 'Invalid payload.'
+        }
+        try:
+            user = User.query.filter_by(email=email).first()
+            if user:
+                response_object['message'] = 'Sorry. That email already exists.'
+                return jsonify(response_object), 400
+            else:
+                db.session.add(User(username=username, email=email))
+                db.session.commit()
+                response_object['status'] = 'success'
+                response_object['message'] = f'{email} was added!'
+        except exc.IntegrityError as e:
+            db.session.rollback()
+            return jsonify(response_object), 400
+
     users = User.query.all()
     return render_template('index.html', users=users)
