@@ -179,9 +179,5 @@ class TestUserService(BaseTestCase):
             self.assertIn(b'michael', response.data)
 
 
-
-
-
-
 if __name__ == '__main__':
     unittest.main()
