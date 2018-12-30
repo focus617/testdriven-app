@@ -31,7 +31,8 @@ def create_app(script_info=None):
     from project.api.users import users_blueprint
     app.register_blueprint(users_blueprint)
 
-    # shell context for flask cli, which is used to register the app and db to the shell.
+    # shell context for flask cli, which is used to register the app and db
+    # to the shell.
     # so we can work with the application context and the database without
     # having to import them directly into the shell
     @app.shell_context_processor
