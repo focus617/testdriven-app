@@ -13,12 +13,19 @@ We'll also be practicing test-driven development (TDD), writing tests first when
 
 What will you build?
 
-Services
+Services:
+
 1.users - Flask app for managing users and auth
+
 2.client - client-side, React app
+
 3.nginx - reverse proxy web server
+
 4.swagger - Swagger API docs
+
 5.scores - Flask app for managing user scores
+
 6.exercises - Flask app for managing exercises
+
 
 [![Build Status](https://travis-ci.org/focus617/testdriven-app.svg?branch=master)](https://travis-ci.org/focus617/testdriven-app)
