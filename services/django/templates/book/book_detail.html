@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Web Application{% endblock %}
+
+{% block header_text %}
+        {% if book.book_cover %}
+            <img src="{{ book.book_cover.url }}" alt="headshot" width="105" height="142"/>
+        {% endif %}
+        <h3>
+            书名： {{ book.title }} </a>
+        </h3>
+        <h3>
+            作者: {{ book.author_name_list }}
+{#                {% for author in authors %}#}
+{#                        {{ author }}#}
+{#                        {% if author.headshot %}#}
+{#                            <img src="{{ author.headshot.url }}" alt="headshot" height="142"/>#}
+{#                        {% endif %}#}
+{#                {% endfor %}#}
+        </h3>
+        <h3>出版商: {{ book.publisher }}</h3>
+        <h3>出版日期: {{ book.publication_date }}</h3>
+
+{% endblock %}
+
+
+{% block sidebar_content %}
+    <h2>简介：</h2>
+    <p>
+        {{ book.abstract }}
+    </p>
+{% endblock %}
+
+{% block content %}
+        <h1>
+            <a href={% url 'book:book_read' book.id %}>
+            {{ book.title }}
+            </a>
+        </h1>
+        <hr>
+        {% for title in titles %}
+            <p>
+                {{ title }}
+            </p>
+        {% endfor %}
+
+{% endblock %}
+

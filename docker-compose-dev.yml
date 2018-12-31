@@ -37,3 +37,19 @@ services:
       - 80:80
     depends_on:
       - users
+
+  mysite:
+    build:
+      context: ./services/django
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/django:/code'
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_HOST=users-db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=postgres
+    depends_on:
+      - users-db

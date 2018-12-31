@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="/static/base.css" rel="stylesheet" media="screen">
+    {% block css %} {% endblock %}
+</head>
+
+<body>
+    <header class="top">
+        {% block header_text %}{% endblock %}
+    </header>
+
+    <div id="container">
+        <div id="tableContainer">
+            <div id="tableRow">
+                {% if directory %}
+                    <section id="directory">
+                        {% block directory %} {% endblock %}
+                    </section>
+                {% endif %}
+
+                <section id="content">
+                    {% block content %} {% endblock %}
+                </section>
+
+                {% if sidebar %}
+                    <aside>
+                        {% block sidebar_content %} {% endblock %}
+                    </aside>
+                {% endif %}
+            </div> <!-- tableRow -->
+
+        {% block lists_content %} {% endblock %}
+
+        </div>  <!-- tableContainer -->
+
+        <hr>
+        <p id="gohome">
+            <a href={% url 'homepages:home' %}> Back Home </a>
+        </p>
+    </div>  <!-- container -->
+
+    <footer>
+        <small>
+            &copy; 2018, Xu Zhiyong's Web-Site<br>
+            All trademarks and registered trademarks appearing on this site are
+            the property of their respective owners.
+        </small>
+    </footer>
+    {% block js %} {% endblock %}
+</body>
+</html>
