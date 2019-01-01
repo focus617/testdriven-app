@@ -4,7 +4,7 @@ services:
   - docker
 
 env:
-  DOCKER_COMPOSE_VERSION: 1.21.1
+  DOCKER_COMPOSE_VERSION: 1.23.1
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -17,6 +17,7 @@ before_script:
 
 script:
   - docker-compose -f docker-compose-dev.yml run users python manage.py test
+  - docker-compose -f docker-compose-dev.yml run mysite python manage.py test
   - docker-compose -f docker-compose-dev.yml run users flake8 project
 
 after_script:

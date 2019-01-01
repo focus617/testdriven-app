@@ -12,6 +12,7 @@ from unittest import skip
 from book.views import  books_list
 from book.models import Classfication, Author, Publisher, Book
 
+
 class ListsPageTest(TestCase):
 
     def test_books_list_page_renders_lists_correct_template(self):

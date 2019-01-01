@@ -2,14 +2,47 @@ version: '3.6'
 
 services:
 
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+    networks:
+      - webnet
+
+  users-db:
+    image: focus617/app-db:1.0
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 5435:5432
+    networks:
+      - webnet
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
   users:
-    build:
-      context: ./services/users
-      dockerfile: Dockerfile-dev
+    image: focus617/app-users:1.0
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "5001:5000"
+    networks:
+      - webnet
     volumes:
       - './services/users:/usr/src/app'
-    ports:
-      - 5001:5000
     environment:
       - FLASK_ENV=development
       - APP_SETTINGS=project.config.DevelopmentConfig
@@ -18,34 +51,22 @@ services:
     depends_on:
       - users-db
 
-  users-db:
-    build:
-      context: ./services/users/project/db
-      dockerfile: Dockerfile
-    ports:
-      - 5435:5432
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-
-  nginx:
-    build:
-      context: ./services/nginx
-      dockerfile: Dockerfile-dev
-    restart: always
-    ports:
-      - 80:80
-    depends_on:
-      - users
-
   mysite:
-    build:
-      context: ./services/django
-      dockerfile: Dockerfile-dev
+    image: focus617/app-mysite:1.0
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
     volumes:
       - './services/django:/code'
     ports:
       - "8000:8000"
+    networks:
+      - webnet
     environment:
       - DATABASE_HOST=users-db
       - DATABASE_PORT=5432
@@ -53,3 +74,18 @@ services:
       - DATABASE_PASSWORD=postgres
     depends_on:
       - users-db
+
+  nginx:
+    image: focus617/app-nginx:1.0
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - 80:80
+    networks:
+      - webnet
+    depends_on:
+      - users
+
+networks:
+  webnet:
