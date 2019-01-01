@@ -8,6 +8,7 @@
 
 from flask import Blueprint, jsonify, request, render_template
 from sqlalchemy import exc
+import socket
 
 from project.api.models import User
 from project import db
@@ -23,6 +24,30 @@ def ping_pong():
         'status': 'success',
         'message': 'pong!'
     })
+
+
+@users_blueprint.route('/users/hello/<user_id>', methods=['GET'])
+def hello(user_id):
+    try:
+        user = User.query.filter_by(id=int(user_id)).first()
+        if not user:
+            name = 'world'
+            visits = "<i>cannot connect to database, counter disabled</i>"
+        else:
+            name = user.username
+            visits = "created on " + str(user.created_date)
+
+        html = "<h3>Hello {name}!</h3>" \
+               "<b>Hostname:</b> {hostname}<br/>" \
+               "<b>Visits:</b> {visits}"
+        return html.format(name=name, hostname=socket.gethostname(),
+                           visits=visits)
+    except ValueError:
+        response_object = {
+            'status': 'fail',
+            'message': 'User does not exist'
+        }
+        return jsonify(response_object), 404
 
 
 @users_blueprint.route('/users', methods=['POST'])
@@ -105,7 +130,8 @@ def index():
         try:
             user = User.query.filter_by(email=email).first()
             if user:
-                response_object['message'] = 'Sorry. That email already exists.'
+                response_object['message'] = ('Sorry. '
+                                              'That email already exists.')
                 return jsonify(response_object), 400
             else:
                 db.session.add(User(username=username, email=email))
