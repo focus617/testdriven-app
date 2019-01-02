@@ -26,30 +26,6 @@ def ping_pong():
     })
 
 
-@users_blueprint.route('/users/hello/<user_id>', methods=['GET'])
-def hello(user_id):
-    try:
-        user = User.query.filter_by(id=int(user_id)).first()
-        if not user:
-            name = 'world'
-            visits = "<i>cannot connect to database, counter disabled</i>"
-        else:
-            name = user.username
-            visits = "created on " + str(user.created_date)
-
-        html = "<h3>Hello {name}!</h3>" \
-               "<b>Hostname:</b> {hostname}<br/>" \
-               "<b>Visits:</b> {visits}"
-        return html.format(name=name, hostname=socket.gethostname(),
-                           visits=visits)
-    except ValueError:
-        response_object = {
-            'status': 'fail',
-            'message': 'User does not exist'
-        }
-        return jsonify(response_object), 404
-
-
 @users_blueprint.route('/users', methods=['POST'])
 def add_user():
     post_data = request.get_json()
@@ -117,7 +93,7 @@ def get_all_users():
 
 
 # Demo for Jinja Templates
-@users_blueprint.route('/', methods=['GET', 'POST'])
+@users_blueprint.route('/users/index', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         username = request.form['username']

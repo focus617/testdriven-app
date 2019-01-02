@@ -20,7 +20,7 @@
         <br>
         <h1 class="title">All Users</h1>
         <hr><br>
-        <form action="/" method="POST">
+        <form action="/users/index" method="POST">
           <div class="field">
             <input
               name="username" class="input"
@@ -40,7 +40,7 @@
           {% if users %}
             <ol>
               {% for user in users %}
-                <li>{{user.username}}</li>
+                <li>{{user.username}}:{{user.email}}</li>
               {% endfor %}
             </ol>
           {% else %}

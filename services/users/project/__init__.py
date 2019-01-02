@@ -38,6 +38,9 @@ def create_app(script_info=None):
     from project.api.users import users_blueprint
     app.register_blueprint(users_blueprint)
 
+    from project.api.microblog import blog_blueprint
+    app.register_blueprint(blog_blueprint)
+
     # shell context for flask cli, which is used to register the app and db
     # to the shell.
     # so we can work with the application context and the database without
