@@ -93,6 +93,7 @@ def get_all_users():
 
 
 # Demo for Jinja Templates
+@users_blueprint.route('/users/', methods=['GET', 'POST'])
 @users_blueprint.route('/users/index', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':

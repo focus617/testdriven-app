@@ -5,9 +5,11 @@ import unittest
 
 from flask.cli import FlaskGroup
 import coverage
+import click
+from flask_migrate import Migrate, MigrateCommand
 
 from project import create_app, db
-from project.api.models import User
+from project.api.models import User, Post
 
 
 COV = coverage.coverage(
@@ -27,6 +29,18 @@ to the Flask app, in order to run and manage the app from the command line
 app = create_app()
 cli = FlaskGroup(create_app=create_app)
 
+migrate = Migrate(app, db)
+cli.add_command('db', MigrateCommand)
+
+
+# shell context for flask cli, which is used to register the app and db
+# to the shell.
+# so we can work with the application context and the database without
+# having to import them directly into the shell
+@app.shell_context_processor
+def ctx():
+    return {'app': app, 'db': db, 'User': User, 'Post': Post}
+
 
 @cli.command()
 def recreate_db():
@@ -37,14 +51,22 @@ def recreate_db():
     db.drop_all()
     db.create_all()
     db.session.commit()
+    click.echo('Database Initialized!')
 
 
 @cli.command()
 def seed_db():
     """Seeds the database."""
-    db.session.add(User(username='michael', email="michael@mherman.org"))
-    db.session.add(User(username='zhxu', email="zhxu@163.com"))
+    user_1 = User(username='Michael', email="michael@mherman.org")
+    user_1.set_password('admin')
+    db.session.add(user_1)
+
+    user_2 = User(username='Xu Zhiyong', email="zhxu@163.com")
+    user_2.set_password('admin')
+    db.session.add(user_2)
+
     db.session.commit()
+    click.echo('Database for User Initialized with some data!')
 
 
 @cli.command()

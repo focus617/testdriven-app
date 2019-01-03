@@ -23,10 +23,9 @@ from django.views.generic import TemplateView
 from homepages import views as home_view
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    path('about/', TemplateView.as_view(template_name="homepages/about.html"), name="about"),
-    url(r'^$', home_view.home_page),
-    url(r'^index/', include('homepages.urls')),
-    # url(r'^book/', include('book.urls')),
-    url(r'^lists/', include('lists.urls')),
+    url(r'^mysite/admin/', admin.site.urls),
+    path('mysite/about/', TemplateView.as_view(template_name="homepages/about.html"), name="about"),
+    url(r'^mysite/pages/', include('homepages.urls')),
+    # url(r'^mysite/books/', include('book.urls')),
+    url(r'^mysite/lists/', include('lists.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

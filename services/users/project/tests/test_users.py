@@ -8,6 +8,7 @@
 
 import json
 import unittest
+from flask import url_for
 
 from project.tests.base import BaseTestCase
 from project.api.users import User
@@ -149,7 +150,7 @@ class TestUserService(BaseTestCase):
     def test_main_no_users(self):
         """Ensure the main route behaves correctly when no users have
         been added to the database."""
-        response = self.client.get('/')
+        response = self.client.get(url_for('users.index'))
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'All Users', response.data)
         self.assertIn(b'<p>No users!</p>', response.data)
@@ -160,7 +161,7 @@ class TestUserService(BaseTestCase):
         add_user('michael', 'michael@mherman.org')
         add_user('fletcher', 'fletcher@notreal.com')
         with self.client:
-            response = self.client.get('/')
+            response = self.client.get(url_for('users.index'))
             self.assertEqual(response.status_code, 200)
             self.assertIn(b'All Users', response.data)
             self.assertNotIn(b'<p>No users!</p>', response.data)
@@ -171,7 +172,7 @@ class TestUserService(BaseTestCase):
         """Ensure a new user can be added to the database."""
         with self.client:
             response = self.client.post(
-                '/',
+                url_for('users.index'),
                 data=dict(username='michael', email='michael@sonotreal.com'),
                 follow_redirects=True
             )
